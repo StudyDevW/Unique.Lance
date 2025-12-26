@@ -1,10 +1,10 @@
-# /pgadmin_data
+/pgadmin_data
 
-# /postgres_data
+/postgres_data
 
-# /redis_cache
+/redis_cache
 
-# /rabbitmq_data
+/rabbitmq_data
 
 .vs
 

@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "UIService.Domain": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

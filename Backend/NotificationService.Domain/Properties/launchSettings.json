@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "NotificationService.Domain": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
