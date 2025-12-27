@@ -13,6 +13,7 @@ namespace AccountService.Application.Interfaces
         public string JwtTokenCreation(AuthCheckSuccess dtoObj);
 
         public string RefreshTokenCreation(AuthCheckSuccess dtoObj);
+
         public Task<TokenValidProperties> AccessTokenValidation(string? bearerKey, string checkrole = "none");
 
         public Task<TokenValidProperties> RefreshTokenValidation(string? bearerKey);

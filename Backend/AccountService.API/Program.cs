@@ -124,6 +124,7 @@ namespace AccountService.API
             builder.Services.AddMediatR(cfg =>
             {
                 cfg.RegisterServicesFromAssemblyContaining<TelegramAuthCommand>();
+                cfg.RegisterServicesFromAssemblyContaining<SessionLogOutCommand>();
             });
 
             var app = builder.Build();

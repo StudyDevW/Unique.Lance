@@ -1,6 +1,8 @@
 ﻿using AccountService.Application.Features.Auth.Commands;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AccountService.API.Controllers
 {
@@ -44,5 +46,27 @@ namespace AccountService.API.Controllers
                 until = result.until
             });
         }
+
+        [HttpPost("sign_out")]
+        [Authorize(AuthenticationSchemes = "Asymmetric")]
+        public async Task<IActionResult> SignOut()
+        {
+            try
+            {
+                await _mediator.Send(new SessionLogOutCommand { accessToken = Request.Headers["Authorization"] });
+
+                Response.Cookies.Delete("refreshToken");
+
+                return Ok("signed_out");
+            }
+            catch (Exception ex) {
+                if (ex.Message == "token_not_validated")
+                    return Unauthorized();
+
+                return BadRequest();
+            }
+
+        }
+
     }
 }
