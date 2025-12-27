@@ -53,6 +53,9 @@ namespace AccountService.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("user_id")
+                        .IsUnique();
+
                     b.ToTable("profileTable");
                 });
 
@@ -80,6 +83,8 @@ namespace AccountService.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("user_id");
 
                     b.ToTable("skillsTable");
                 });
@@ -132,8 +137,8 @@ namespace AccountService.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d102f03a-d040-4eda-a48d-659616a7d3d3"),
-                            created_at = new DateTime(2025, 12, 25, 22, 17, 40, 481, DateTimeKind.Utc).AddTicks(4360),
+                            Id = new Guid("0491979d-08ee-4f4e-b617-c794c2d38453"),
+                            created_at = new DateTime(2025, 12, 27, 1, 35, 0, 304, DateTimeKind.Utc).AddTicks(5133),
                             first_name = "Антон",
                             is_verified = true,
                             last_name = "(Study)",
@@ -142,6 +147,35 @@ namespace AccountService.Infrastructure.Migrations
                             telegram_id = "1006365928",
                             username = "studywhite"
                         });
+                });
+
+            modelBuilder.Entity("AccountService.Domain.Entities.ProfileTable", b =>
+                {
+                    b.HasOne("AccountService.Domain.Entities.UsersTable", "User")
+                        .WithOne("Profile")
+                        .HasForeignKey("AccountService.Domain.Entities.ProfileTable", "user_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AccountService.Domain.Entities.SkillsTable", b =>
+                {
+                    b.HasOne("AccountService.Domain.Entities.UsersTable", "User")
+                        .WithMany("Skills")
+                        .HasForeignKey("user_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AccountService.Domain.Entities.UsersTable", b =>
+                {
+                    b.Navigation("Profile");
+
+                    b.Navigation("Skills");
                 });
 #pragma warning restore 612, 618
         }

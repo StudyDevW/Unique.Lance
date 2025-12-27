@@ -22,5 +22,7 @@ namespace AccountService.Domain.Entities
         public int completed_projects { get; set; }
 
         public DateTime? updated_at { get; set; }
+
+        public virtual UsersTable? User { get; set; }
     }
 }

@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountService.Application.Interfaces
+namespace AccountService.Application.DTOs.JWT.CheckUsers
 {
-    public interface IDatabaseUsers
+    public class AuthCheckError
     {
+        public string? errorLog { get; set; }
     }
 }

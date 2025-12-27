@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountService.Contracts.Interfaces
+namespace AccountService.Application.DTOs.JWT.Token
 {
-    public interface IDomainUsers
+    public class TokenValidError
     {
+        public string? errorLog { get; set; }
     }
 }

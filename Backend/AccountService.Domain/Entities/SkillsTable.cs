@@ -18,5 +18,7 @@ namespace AccountService.Domain.Entities
         public bool verified { get; set; }
 
         public int years_of_expirience { get; set; }
+
+        public virtual UsersTable? User { get; set; } 
     }
 }

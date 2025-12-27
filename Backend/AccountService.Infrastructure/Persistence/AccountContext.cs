@@ -51,6 +51,40 @@ namespace AccountService.Infrastructure.Persistence
                     created_at = DateTime.UtcNow
                 }
             );
+
+
+            modelBuilder.Entity<UsersTable>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.HasOne(u => u.Profile)
+                    .WithOne(p => p.User)
+                    .HasForeignKey<ProfileTable>(p => p.user_id)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(u => u.Skills)
+                    .WithOne(s => s.User)
+                    .HasForeignKey(s => s.user_id)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<ProfileTable>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => e.user_id)
+                    .IsUnique();
+
+                entity.HasOne(p => p.User)
+                    .WithOne(u => u.Profile)
+                    .HasForeignKey<ProfileTable>(p => p.user_id)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<SkillsTable>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => e.user_id);
+            });
         }
     }
 }

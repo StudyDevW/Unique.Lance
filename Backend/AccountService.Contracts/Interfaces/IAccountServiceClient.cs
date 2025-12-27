@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,10 @@ using System.Threading.Tasks;
 
 namespace AccountService.Contracts.Interfaces
 {
-    public interface IDatabaseUsersAccount
+    public interface IAccountServiceClient
     {
+      //  public Task<AccountDTO> GetAccountAsync(Guid accountId, CancellationToken ct = default);
+
+
     }
 }

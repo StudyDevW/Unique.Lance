@@ -10,40 +10,6 @@ namespace AccountService.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "profileTable",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    header_url = table.Column<string>(type: "text", nullable: true),
-                    bio = table.Column<string>(type: "text", nullable: false),
-                    country = table.Column<string>(type: "text", nullable: false),
-                    rating = table.Column<int>(type: "integer", nullable: false),
-                    completed_projects = table.Column<int>(type: "integer", nullable: false),
-                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_profileTable", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "skillsTable",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    name = table.Column<string>(type: "text", nullable: false),
-                    level = table.Column<string>(type: "text", nullable: false),
-                    verified = table.Column<bool>(type: "boolean", nullable: false),
-                    years_of_expirience = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_skillsTable", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "userTable",
                 columns: table => new
                 {
@@ -64,10 +30,67 @@ namespace AccountService.Infrastructure.Migrations
                     table.PrimaryKey("PK_userTable", x => x.Id);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "profileTable",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    header_url = table.Column<string>(type: "text", nullable: true),
+                    bio = table.Column<string>(type: "text", nullable: false),
+                    country = table.Column<string>(type: "text", nullable: false),
+                    rating = table.Column<int>(type: "integer", nullable: false),
+                    completed_projects = table.Column<int>(type: "integer", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_profileTable", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_profileTable_userTable_user_id",
+                        column: x => x.user_id,
+                        principalTable: "userTable",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "skillsTable",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    name = table.Column<string>(type: "text", nullable: false),
+                    level = table.Column<string>(type: "text", nullable: false),
+                    verified = table.Column<bool>(type: "boolean", nullable: false),
+                    years_of_expirience = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_skillsTable", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_skillsTable_userTable_user_id",
+                        column: x => x.user_id,
+                        principalTable: "userTable",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "userTable",
                 columns: new[] { "Id", "created_at", "first_name", "is_verified", "last_login", "last_name", "photo_url", "roles", "status", "telegram_id", "username" },
-                values: new object[] { new Guid("d102f03a-d040-4eda-a48d-659616a7d3d3"), new DateTime(2025, 12, 25, 22, 17, 40, 481, DateTimeKind.Utc).AddTicks(4360), "Антон", true, null, "(Study)", null, new[] { "Freelancer" }, "offline", "1006365928", "studywhite" });
+                values: new object[] { new Guid("0491979d-08ee-4f4e-b617-c794c2d38453"), new DateTime(2025, 12, 27, 1, 35, 0, 304, DateTimeKind.Utc).AddTicks(5133), "Антон", true, null, "(Study)", null, new[] { "Freelancer" }, "offline", "1006365928", "studywhite" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_profileTable_user_id",
+                table: "profileTable",
+                column: "user_id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_skillsTable_user_id",
+                table: "skillsTable",
+                column: "user_id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

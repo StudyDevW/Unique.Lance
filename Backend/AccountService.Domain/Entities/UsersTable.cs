@@ -28,5 +28,8 @@ namespace AccountService.Domain.Entities
         public DateTime created_at { get; set; }
 
         public DateTime? last_login { get; set; }
+
+        public virtual ProfileTable? Profile { get; set; }  // 1:1
+        public virtual ICollection<SkillsTable> Skills { get; set; } = new List<SkillsTable>();
     }
 }
