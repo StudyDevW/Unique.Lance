@@ -49,6 +49,9 @@ namespace AccountService.Application.Features.Auth.Handlers
             }
             else
             {
+                //TODO:
+                //Если пользователь изменился в телеграме то нужно его будет еще изменить и здесь
+                //
                 user.last_login = DateTime.UtcNow;
                 user.status = "Online";
                 _unitOfWork.Users.UpdateUser(user);
@@ -56,26 +59,23 @@ namespace AccountService.Application.Features.Auth.Handlers
 
             await _unitOfWork.SaveChangesAsync(ct);
 
-            var generatedAccessToken = _jwtService.JwtTokenCreation(new AuthCheckSuccess
+            var checkSuccess = new AuthCheckSuccess
             {
                 Id = user.Id,
                 roles = user.roles.ToList(),
                 username = user.username
-            });
+            };
+
+            var generatedAccessToken = _jwtService.JwtTokenCreation(checkSuccess);
 
 
-            var generatedRefreshToken = _jwtService.RefreshTokenCreation(new AuthCheckSuccess
-            {
-                Id = user.Id,
-                roles = user.roles.ToList(),
-                username = user.username
-            });
+            var generatedRefreshToken = _jwtService.RefreshTokenCreation(checkSuccess);
 
             return new TelegramAuthResponse
             {
                 accessToken = generatedAccessToken,
                 refreshToken = generatedRefreshToken,
-                until = DateTime.UtcNow.AddMinutes(5)
+                until = DateTime.UtcNow.AddMinutes(5) //TODO: Достать актуальное из Redis 
             };
         }
 

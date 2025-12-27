@@ -125,6 +125,7 @@ namespace AccountService.API
             {
                 cfg.RegisterServicesFromAssemblyContaining<TelegramAuthCommand>();
                 cfg.RegisterServicesFromAssemblyContaining<SessionLogOutCommand>();
+                cfg.RegisterServicesFromAssemblyContaining<RefreshTokensCommand>();
             });
 
             var app = builder.Build();

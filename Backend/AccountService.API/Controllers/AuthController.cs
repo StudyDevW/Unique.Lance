@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System.Security.Claims;
 
 namespace AccountService.API.Controllers
@@ -47,7 +48,32 @@ namespace AccountService.API.Controllers
             });
         }
 
-        [HttpPost("sign_out")]
+        [HttpPost("refresh_tokens")]
+        public async Task<IActionResult> RefreshTokens()
+        {
+            var refreshTokenCookies = Request.Cookies["refreshToken"];
+
+            if (refreshTokenCookies == null)
+                return Unauthorized("token_not_found_in_cookies");
+
+            var result = await _mediator.Send(new RefreshTokensCommand { refreshToken = refreshTokenCookies });
+
+            Response.Cookies.Append("refreshToken", result.refreshToken, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddDays(7)
+            });
+
+            return Ok(new
+            {
+                accessToken = result.accessToken,
+                until = result.until
+            });
+        }
+
+        [HttpPut("sign_out")]
         [Authorize(AuthenticationSchemes = "Asymmetric")]
         public async Task<IActionResult> SignOut()
         {
