@@ -288,8 +288,6 @@ namespace AccountService.Infrastructure.Services
 
             _cacheService.WriteKeyInStorage(dtoObj.Id, "accessTokens", jwtToken, DateTime.UtcNow.AddMinutes(10));
 
-
-
             return jwtToken;
         }
 

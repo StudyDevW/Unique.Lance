@@ -1,4 +1,5 @@
 ﻿using AccountService.Application.Features.Auth.Commands;
+using AccountService.Contracts.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ namespace AccountService.API.Controllers
 {
     [Route("api/auth/")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController : ControllerBase, IAccountPublicAPI
     {
         private readonly IMediator _mediator;
 
@@ -71,6 +72,25 @@ namespace AccountService.API.Controllers
                 accessToken = result.accessToken,
                 until = result.until
             });
+        }
+
+        public async Task<bool> ValidateTokenPublicAPI()
+        {
+            var result = await _mediator.Send(new ValidateTokenCommand { accessToken = Request.Headers["Authorization"] });
+
+            return result;
+        }
+
+        [HttpGet("validate")]
+        [Authorize(AuthenticationSchemes = "Asymmetric")]
+        public async Task<IActionResult> ValidateToken()
+        {
+            var validate = await ValidateTokenPublicAPI();
+
+            if (!validate)
+                return Unauthorized();
+
+            return Ok("valid");
         }
 
         [HttpPut("sign_out")]

@@ -30,8 +30,7 @@ namespace AccountService.Application.Features.Auth.Handlers
 
             var user = await _unitOfWork.Users.GetUserFromTelegramId(request.id);
 
-            if (user == null)
-            {
+            if (user == null) {
                 user = new UsersTable
                 {
                     Id = Guid.NewGuid(),
@@ -47,11 +46,7 @@ namespace AccountService.Application.Features.Auth.Handlers
 
                 await _unitOfWork.Users.CreateUser(user);
             }
-            else
-            {
-                //TODO:
-                //Если пользователь изменился в телеграме то нужно его будет еще изменить и здесь
-                //
+            else {
                 user.last_login = DateTime.UtcNow;
                 user.status = "Online";
                 _unitOfWork.Users.UpdateUser(user);
@@ -68,16 +63,14 @@ namespace AccountService.Application.Features.Auth.Handlers
 
             var generatedAccessToken = _jwtService.JwtTokenCreation(checkSuccess);
 
-
             var generatedRefreshToken = _jwtService.RefreshTokenCreation(checkSuccess);
 
             return new TelegramAuthResponse
             {
                 accessToken = generatedAccessToken,
                 refreshToken = generatedRefreshToken,
-                until = DateTime.UtcNow.AddMinutes(5) //TODO: Достать актуальное из Redis 
+                until = DateTime.UtcNow.AddMinutes(10) //TODO: Достать актуальное из Redis 
             };
         }
-
     }
 }
